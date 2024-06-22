@@ -30,3 +30,4 @@ class KNN:
         #classe majoritaria
         majoritaria = Counter(k_classes_mais_proximas).most_common()
         return majoritaria[0][0]
+    

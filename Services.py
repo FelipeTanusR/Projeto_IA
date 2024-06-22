@@ -33,3 +33,8 @@ class tratamento_de_dados:
         dados = pd.concat([x, y],axis=1, names=['Experiência', 'Publicações', 'Conexões', 'Qualidade'])
         return dados
     
+    def get_dados_teste(self,dados,resposta):
+        dados = pd.DataFrame(dados,columns=['Experiência', 'Publicações', 'Conexões','Qualidade'])
+        resposta = pd.DataFrame(resposta,columns=['Valor gerado'])
+        dados = pd.concat([dados,resposta],axis=1, names=['Experiência', 'Publicações', 'Conexões', 'Qualidade','Valor gerado'])
+        return dados

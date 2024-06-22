@@ -25,6 +25,8 @@
                     <th class="border border-blue-600 py-2 text-center" style="text-align: center;">Conexões</th>
                     <!--<th class="border border-blue-600 py-2 text-center" style="text-align: right;">Salário</th>-->
                     <th class="border border-blue-600 py-2 text-center" style="text-align: center;">Qualidade</th>
+                    <th class="border border-blue-600 py-2 text-center" style="text-align: center;">Valor Gerado</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -35,12 +37,17 @@
                     <td class="border border-blue-600 py-2" style="text-align: center;">{{ row['Conexões'] }}</td>
                     <!--<td class="border border-blue-600 py-2" style="text-align: right;">{{ row['Salário'] }}</td>-->
                     <td class="border border-blue-600 py-2" style="text-align: center;">{{ row['Qualidade'] }}</td>
+                    <td class="border border-blue-600 py-2" style="text-align: center;">{{ row['Valor gerado'] }}</td>
 
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
+        <br>
+        <div>
+            
+            <h1 class="text-3xl font-bold py-2 mb-4"style="text-align: right;">{{ precisao }}</h1>
+        </div>
         
     </div>
 </body>
