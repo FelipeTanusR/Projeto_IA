@@ -13,14 +13,21 @@ arquivo = "Dados_Python.xlsx"
 
 caminho = os.path.join(Pasta_Raiz,arquivo)
 dados = pd.read_excel(caminho, sheet_name='Dados_Python')
-
+dados.drop(['Salário'],axis=1)
 
 
 
 @app.route('/')
-def hello():
+def dados_teste():
     return render_template(
-        'relatorios.html',
+        
+    )
+
+
+@app.route('/dados_treino')
+def dados_treino():
+    return render_template(
+        'dados_treino.html',
         dados=dados
     )
 
