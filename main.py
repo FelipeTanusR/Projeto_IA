@@ -1,7 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, flash, request, redirect
+from Services import tratamento_de_dados
 import pandas as pd
 import numpy as np
 import os
+
+#inicializa o objeto de tratamento de dados
+action = tratamento_de_dados()
 
 #inicializa o flask
 app = Flask(__name__)
@@ -17,13 +21,19 @@ dados.drop(['Salário'],axis=1)
 
 
 
+########################################################
+##################PAGINA PRINCIPAL######################
 @app.route('/')
-def dados_teste():
+def home():
+    
     return render_template(
-        
+        'home.html'
     )
 
 
+
+########################################################
+##################PAGINAS DE DADOS######################
 @app.route('/dados_treino')
 def dados_treino():
     return render_template(
