@@ -13,11 +13,16 @@ action = tratamento_de_dados()
 
 #busca os dados do arquivo excel
 dados_gerais = action.get_dados_gerais()
+print(dados_gerais)
 #converte os dados para tuplas x,y
 X = action.get_x(dados_gerais)
 Y = action.get_y(dados_gerais) 
 #separa os casos de teste e treino
 treino_x, teste_x, treino_y, teste_y =  train_test_split(X.to_numpy(),Y.to_numpy(), test_size= 0.2, random_state=1234) 
+
+
+
+
 
 #inicializa o objeto KNN
 clf = KNN()
@@ -77,7 +82,7 @@ def alterar_k():
 @app.route('/testar_curriculo',methods=['GET','POST'])
 def testar_curriculo():
     try:
-        exp = request.form['Experiência']
+        exp = request.form['Razão de Experiência']
         pub = request.form['Publicações']
         con = request.form['Conexões']
         

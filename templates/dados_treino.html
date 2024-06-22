@@ -20,7 +20,7 @@
         <table id="Dados_de_Treino" class="table-auto border-collapse w-full mb-8">
             <thead>
                 <tr class="bg-blue-700 text-white">
-                    <th class="border border-blue-600 py-2 text-center" style="text-align: center;">Experiência</th>
+                    <th class="border border-blue-600 py-2 text-center" style="text-align: center;">Razão de Experiência</th>
                     <th class="border border-blue-600 py-2 text-center" style="text-align: center;">Publicações</th>
                     <th class="border border-blue-600 py-2 text-center" style="text-align: center;">Conexões</th>
                     <!--<th class="border border-blue-600 py-2 text-center" style="text-align: right;">Salário</th>-->
@@ -30,7 +30,7 @@
             <tbody>
                 {% for index,row in dados.iterrows() %}
                 <tr class="bg-white">
-                    <td class="border border-blue-600 py-2" style="text-align: center;">{{row['Experiência'] }}</td>
+                    <td class="border border-blue-600 py-2" style="text-align: center;">{{row['Razão de Experiência'] }}</td>
                     <td class="border border-blue-600 py-2" style="text-align: center;">{{ row['Publicações'] }}</td>
                     <td class="border border-blue-600 py-2" style="text-align: center;">{{ row['Conexões'] }}</td>
                     <!--<td class="border border-blue-600 py-2" style="text-align: right;">{{ row['Salário'] }}</td>-->
