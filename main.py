@@ -1,38 +1,18 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
-from services import tratamento_de_dados
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
-from KNN import KNN
-import pandas as pd
-import numpy as np
-import os
-
-#inicializa o objeto de tratamento de dados
-action = tratamento_de_dados()
+from Services import tratamento_de_dados
+from user import user
 
 #inicializa o flask
 app = Flask(__name__)
 app.secret_key = 'Projeto_IA'
 
-#busca os dados do arquivo excel
-dados_gerais = action.get_dados_gerais()
+#inicializa o objeto de tratamento de dados
+action = tratamento_de_dados()
+
+#inicializa o objeto que controla o KNN
+controle = user() 
 
 
-#converte os dados para tuplas x,y
-
-
-X = action.get_x(dados_gerais)
-Y = action.get_y(dados_gerais)
-
-
-#separa os casos de teste e treino
-treino_x, teste_x, treino_y, teste_y =  train_test_split(X.to_numpy(),Y.to_numpy(), test_size= 0.2, random_state=1234)
-
-
-
-clf = KNN()
-clf.fit(treino_x,treino_y)
-teste_y = clf.predict(teste_x)
 
 
 
@@ -50,20 +30,23 @@ def home():
         'home.html'
     )
 
-@app.route('/testar_curriculo',methods=['POST'])
+@app.route('/testar_curriculo',methods=['GET','POST'])
 def testar_curriculo():
     try:
-        exp = request.form['exp']
-        pub = request.form['pub']
-        con = request.form['con']
-
-        X = action.concatena_atributos(exp,pub,con)
+        exp = request.form['Experiência']
+        pub = request.form['Publicações']
+        con = request.form['Conexões']
+        
+        X = action.concatena_atributos(int(exp),int(pub),int(con))
         print(X)
-
-        flash(X, 'SUCESSO_1')
+        X = controle.clf.predict(X)
+        print(X)
+        
+        flash('A qualidade do currículo é: ' + X[0], 'SUCESSO_1')
         return redirect(url_for('home'))
     except Exception as e:
-        flash('Erro ao realizar ação.', 'ERRO_1')
+        print(e)
+        flash('Erro ao formatar o texto', 'ERRO_1')
         return redirect(url_for('home'))
 
 
@@ -73,14 +56,14 @@ def testar_curriculo():
 def dados_treino():
     return render_template(
         'dados_treino.html',
-        dados=action.get_dados(treino_x,treino_y)
+        dados=action.get_dados(controle.treino_x,controle.treino_y)
     )
 
 @app.route('/dados_teste')
 def dados_teste():
     return render_template(
         'dados_teste.html',
-        dados=action.get_dados(teste_x,teste_y)
+        dados=action.get_dados(controle.teste_x, controle.teste_y)
     )
 
 

@@ -6,6 +6,7 @@ class tratamento_de_dados:
     
     def concatena_atributos(self,Exp,Pub,Con):
         X = [Exp,Pub,Con]
+        X = np.asmatrix(X)
         return X
     
     def get_dados_gerais(self):

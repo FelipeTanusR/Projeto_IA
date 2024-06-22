@@ -10,12 +10,6 @@ class KNN:
     #inicializa a classe com o valor de k (default = 3)
     def __init__(self, k = 3):
         self.k = k
-    
-    def get_k(self):
-        return self.k
-    
-    def set_K(self, k):
-        self.k = k
 
     def fit(self, X, y):
         self.Treino_X = X
