@@ -11,6 +11,11 @@ class KNN:
     def __init__(self, k = 3):
         self.k = k
     
+    def get_k(self):
+        return self.k
+    
+    def set_K(self, k):
+        self.k = k
 
     def fit(self, X, y):
         self.Treino_X = X
@@ -30,4 +35,4 @@ class KNN:
 
         #classe majoritaria
         majoritaria = Counter(k_classes_mais_proximas).most_common()
-        return majoritaria
+        return majoritaria[0][0]

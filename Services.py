@@ -14,13 +14,21 @@ class tratamento_de_dados:
         arquivo = "Dados_Python.xlsx"
         caminho = os.path.join(Pasta_Raiz,arquivo)
         dados_gerais = pd.read_excel(caminho, sheet_name='Dados_Python')
-        dados_gerais.drop(['Salário'],axis=1)
-        return dados_gerais
-
-    def separa_dados_treino(self,dados_gerais):
-
+        dados_gerais = dados_gerais.drop(['Salário'],axis=1)
+        dados_gerais = dados_gerais.dropna()
         return dados_gerais
     
-    def separa_dados_teste(self,dados_gerais):
-        
-        return dados_gerais
+    def get_x(self,dados_gerais):
+        x = dados_gerais.loc[:,['Conexões', 'Publicações', 'Conexões']]
+        return x
+    
+    def get_y(self,dados_gerais):
+        Y= dados_gerais.loc[:,'Qualidade']
+        return Y
+
+    def get_dados(self,x,y):
+        x = pd.DataFrame(x,columns=['Experiência', 'Publicações', 'Conexões'])
+        y = pd.DataFrame(y,columns=['Qualidade'])
+        dados = pd.concat([x, y],axis=1, names=['Experiência', 'Publicações', 'Conexões', 'Qualidade'])
+        return dados
+    

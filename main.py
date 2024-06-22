@@ -1,5 +1,8 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
 from services import tratamento_de_dados
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from KNN import KNN
 import pandas as pd
 import numpy as np
 import os
@@ -11,12 +14,25 @@ action = tratamento_de_dados()
 app = Flask(__name__)
 app.secret_key = 'Projeto_IA'
 
-#busca e trata os dados do excel
+#busca os dados do arquivo excel
 dados_gerais = action.get_dados_gerais()
-dados_para_treino = action.separa_dados_treino(dados_gerais)
-dados_para_teste = action.separa_dados_teste(dados_gerais)
 
 
+#converte os dados para tuplas x,y
+
+
+X = action.get_x(dados_gerais)
+Y = action.get_y(dados_gerais)
+
+
+#separa os casos de teste e treino
+treino_x, teste_x, treino_y, teste_y =  train_test_split(X.to_numpy(),Y.to_numpy(), test_size= 0.2, random_state=1234)
+
+
+
+clf = KNN()
+clf.fit(treino_x,treino_y)
+teste_y = clf.predict(teste_x)
 
 
 
@@ -57,14 +73,14 @@ def testar_curriculo():
 def dados_treino():
     return render_template(
         'dados_treino.html',
-        dados=dados_para_treino
+        dados=action.get_dados(treino_x,treino_y)
     )
 
 @app.route('/dados_teste')
 def dados_teste():
     return render_template(
         'dados_teste.html',
-        dados=dados_para_teste
+        dados=action.get_dados(teste_x,teste_y)
     )
 
 
