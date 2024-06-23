@@ -31,3 +31,8 @@ class KNN:
         majoritaria = Counter(k_classes_mais_proximas).most_common()
         return majoritaria[0][0]
     
+    def set_previsao_precisao(self,x,y):
+        self.previsoes = self.predict(x) 
+        self.precisao = (np.sum(self.previsoes == y)/len(y))*100
+        self.precisao = 'Taxa de acertos: '+str(self.precisao) + '%'
+

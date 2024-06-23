@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
 from Services import tratamento_de_dados
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 from KNN import KNN
 
@@ -21,18 +22,27 @@ Y = action.get_y(dados_gerais)
 treino_x, teste_x, treino_y, teste_y =  train_test_split(X.to_numpy(),Y.to_numpy(), test_size= 0.2, random_state=1234) 
 
 
-
-
+#inicializa o objeto AD
+tree = DecisionTreeClassifier()
+#insere os dados de treino
+tree.fit(treino_x,treino_y)
+#recupera os resultados do teste
+prec = tree.predict(teste_x)
+print (prec)
+#% de acertos do modelo
+prev = (np.sum(prec == teste_y)/len(teste_y))*100
+prev = 'Taxa de acertos: '+str(prev) + '%'
+print(prev)
 
 #inicializa o objeto KNN
 clf = KNN()
 #insere os dados de treino
 clf.fit(treino_x,treino_y)
 #recupera os resultados do teste
-previsoes = clf.predict(teste_x) 
+clf.set_previsao_precisao(teste_x,teste_y)
+previsoes = clf.previsoes
+precisao = clf.precisao
 #% de acertos do modelo
-precisao = (np.sum(previsoes == teste_y)/len(teste_y))*100
-precisao = 'Taxa de acertos: '+str(precisao) + '%'
 print(precisao)
 
 
@@ -66,9 +76,7 @@ def alterar_k():
         
         X = clf.k = int (k)
         clf.fit(treino_x,treino_y)
-        previsoes = clf.predict(teste_x) 
-        precisao = (np.sum(previsoes == teste_y)/len(teste_y))*100
-        precisao = 'Taxa de acertos: '+str(precisao) + '%'
+        clf.set_previsao_precisao(teste_x,teste_y)
 
         
         flash('Valor de K alterado para: ' + str(clf.k), 'SUCESSO_1')
@@ -87,7 +95,12 @@ def testar_curriculo():
         con = request.form['Conexões']
         
         X = action.concatena_atributos(int(exp),int(pub),int(con))
-        X = clf.predict(X)
+        if 'AD' in request.form:
+            X = tree.predict(np.asarray(X.flatten()))
+            print('ad')
+        else:
+            X = clf.predict(X)
+            print('knn')
         
         flash('A qualidade do currículo é: ' + X[0], 'SUCESSO_2')
         return redirect(url_for('home'))
@@ -95,6 +108,7 @@ def testar_curriculo():
         print(e)
         flash('Erro ao formatar o texto', 'ERRO_2')
         return redirect(url_for('home'))
+    
 
 
 ########################################################
@@ -104,16 +118,30 @@ def dados_treino():
     r_dados = action.get_dados(treino_x,treino_y)
     return render_template(
         'dados_treino.html',
-        dados = r_dados
+        dados = r_dados,
+        valor_k = 'Valor de K: '+str(clf.k)
     )
 
 @app.route('/dados_teste')
 def dados_teste():
+    previsoes = clf.previsoes
+    precisao = clf.precisao
     r_dados = action.get_dados_teste(action.get_dados(teste_x, teste_y),previsoes)
     return render_template(
         'dados_teste.html',
         dados = r_dados,
-        precisao = precisao
+        precisao = precisao,
+        valor_k = 'Valor de K: '+str(clf.k)
+    )
+
+@app.route('/dados_teste_AD')
+def dados_teste_AD():
+    r_dados = action.get_dados_teste(action.get_dados(teste_x,teste_y),prec)
+    return render_template(
+        'dados_teste_AD.html',
+        dados = r_dados,
+        precisao = prev,
+        valor_k = 'Valor de K: '+str(clf.k)
     )
 
 
