@@ -77,6 +77,7 @@ def alterar_k():
         X = clf.k = int (k)
         clf.fit(treino_x,treino_y)
         clf.set_previsao_precisao(teste_x,teste_y)
+        print(clf.precisao)
 
         
         flash('Valor de K alterado para: ' + str(clf.k), 'SUCESSO_1')
