@@ -34,5 +34,6 @@ class KNN:
     def set_previsao_precisao(self,x,y):
         self.previsoes = self.predict(x) 
         self.precisao = (np.sum(self.previsoes == y)/len(y))*100
+        self.precisao = round(self.precisao,2)
         self.precisao = 'Taxa de acertos: '+str(self.precisao) + '%'
 

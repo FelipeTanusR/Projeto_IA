@@ -4,7 +4,8 @@ import os
 
 class tratamento_de_dados:
     
-    def concatena_atributos(self,Exp,Pub,Con):
+    def concatena_atributos(self,Exp,Pub,Con,Sal):
+        Exp = Sal/Exp
         X = [Exp,Pub,Con]
         X = np.asmatrix(X)
         return X
@@ -15,7 +16,6 @@ class tratamento_de_dados:
         arquivo = "Dados_Python.xlsx"
         caminho = os.path.join(Pasta_Raiz,arquivo)
         dados_gerais = pd.read_excel(caminho, sheet_name='Dados_Python')
-        dados_gerais = dados_gerais.drop(['Profissão'],axis=1)
         dados_gerais = dados_gerais.dropna()
         dados_gerais['Experiência'] = dados_gerais['Salário']/ dados_gerais['Experiência']
         dados_gerais = dados_gerais.rename(columns={'Experiência':'Razão de Experiência'})

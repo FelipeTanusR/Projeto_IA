@@ -5,6 +5,7 @@ from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 from KNN import KNN
 
+
 #inicializa o flask
 app = Flask(__name__)
 app.secret_key = 'Projeto_IA'
@@ -31,11 +32,12 @@ prec = tree.predict(teste_x)
 print (prec)
 #% de acertos do modelo
 prev = (np.sum(prec == teste_y)/len(teste_y))*100
+prev = round(prev,2)
 prev = 'Taxa de acertos: '+str(prev) + '%'
 print(prev)
 
 #inicializa o objeto KNN
-clf = KNN()
+clf = KNN(k=9)
 #insere os dados de treino
 clf.fit(treino_x,treino_y)
 #recupera os resultados do teste
@@ -91,11 +93,12 @@ def alterar_k():
 @app.route('/testar_curriculo',methods=['GET','POST'])
 def testar_curriculo():
     try:
-        exp = request.form['Razão de Experiência']
+        exp = request.form['Experiência']
         pub = request.form['Publicações']
         con = request.form['Conexões']
+        sal = request.form['Salário Desejado']
         
-        X = action.concatena_atributos(int(exp),int(pub),int(con))
+        X = action.concatena_atributos(int(exp),int(pub),int(con), int(sal))
         if 'AD' in request.form:
             X = tree.predict(np.asarray(X.flatten()))
             print('ad')
